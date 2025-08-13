@@ -3,6 +3,7 @@ package co.com.nequi.usecase.user;
 import co.com.nequi.model.enums.DomainMessage;
 import co.com.nequi.model.exceptions.BusinessException;
 import co.com.nequi.model.user.User;
+import co.com.nequi.model.user.gateways.UserCacheGateway;
 import co.com.nequi.model.user.gateways.UserExternalSourceGateway;
 import co.com.nequi.model.user.gateways.UserPersistenceGateway;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ public class UserUseCase {
 
     private final UserPersistenceGateway userPersistenceGateway;
     private final UserExternalSourceGateway userExternalSourceGateway;
+    private final UserCacheGateway userCacheGateway;
 
     public Mono<User> createUser(Long userId){
         return userPersistenceGateway.findUserById(userId)
@@ -28,9 +30,14 @@ public class UserUseCase {
     }
 
     public Mono<User> findUserById(Long userId){
-        return userPersistenceGateway.findUserById(userId)
+        return userCacheGateway.getUser(userId)
                 .switchIfEmpty(
+                    userPersistenceGateway.findUserById(userId)
+                    .flatMap(userFound ->
+                        userCacheGateway.saveUser(userFound).onErrorReturn(userFound)
+                    ).switchIfEmpty(
                         Mono.error(new BusinessException(DomainMessage.USER_NOT_FOUND))
+                    )
                 );
     }
 
