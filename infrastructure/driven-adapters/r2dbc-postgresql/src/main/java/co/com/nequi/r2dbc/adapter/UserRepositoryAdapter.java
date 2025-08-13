@@ -7,6 +7,7 @@ import co.com.nequi.r2dbc.helper.ReactiveAdapterOperations;
 import co.com.nequi.r2dbc.repository.UserRepository;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Repository
@@ -21,7 +22,7 @@ public class UserRepositoryAdapter extends ReactiveAdapterOperations<
     }
 
     @Override
-    public Mono<User> upsertUser(User user) {
+    public Mono<User> insertUser(User user) {
         user.setId(null);
         return this.save(user);
     }
@@ -29,5 +30,15 @@ public class UserRepositoryAdapter extends ReactiveAdapterOperations<
     @Override
     public Mono<User> findUserById(Long id) {
         return this.findById(id);
+    }
+
+    @Override
+    public Flux<User> findAllUser() {
+        return this.findAll();
+    }
+
+    @Override
+    public Flux<User> findAllUsersByName(String name) {
+        return repository.findUsersByName(name).map(this::toEntity);
     }
 }

@@ -1,10 +1,10 @@
 package co.com.nequi.api.routers;
 
 import co.com.nequi.api.constants.CommonConstants;
-import co.com.nequi.api.constants.OpenApiConstants;
+import co.com.nequi.api.constants.SchemaConstants;
+import co.com.nequi.api.dto.response.UserDetails;
 import co.com.nequi.api.handler.UserHandler;
 import co.com.nequi.api.util.ErrorDto;
-import co.com.nequi.model.user.User;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -30,44 +30,63 @@ public class RouterRest {
         return route()
                 .GET("/api/v1/users/{id}", userHandler::getUserById,getUserByIdOpenAPI())
                 .POST("/api/v1/users/{id}", userHandler::postCreateUser, postCreateUserOpenAPI())
+                .GET("/api/v1/users", userHandler::getAllUsers,getAllUsersOpenAPI())
             .build();
     }
 
     private Consumer<Builder> getUserByIdOpenAPI() {
-        return ops -> ops.tag(OpenApiConstants.API_USER_TAG)
-                .operationId(OpenApiConstants.OPERATION_ID_FIND_USER_BY_ID).summary(OpenApiConstants.SUMMARY_FIND_USER_BY_ID)
+        return ops -> ops.tag(SchemaConstants.API_USER_TAG)
+                .operationId(SchemaConstants.OPERATION_ID_FIND_USER_BY_ID).summary(SchemaConstants.SUMMARY_FIND_USER_BY_ID)
                 .parameter(parameterBuilder()
-                        .in(ParameterIn.PATH).name(CommonConstants.PATH_ID).description(OpenApiConstants.DESCRIPTION_PARAM_ID).required(true))
-                .response(responseBuilder().responseCode(String.valueOf(HttpStatus.OK))
-                        .description(OpenApiConstants.DESCRIPTION_RESPONSE_SUCCESSFUL)
-                        .implementation(User.class))
-                .response(responseBuilder().responseCode(String.valueOf(HttpStatus.BAD_REQUEST))
+                        .in(ParameterIn.PATH).name(CommonConstants.PATH_PARAM_ID).description(SchemaConstants.DESCRIPTION_PARAM_ID).required(true))
+                .response(responseBuilder().responseCode(String.valueOf(HttpStatus.OK.value()))
+                        .description(SchemaConstants.DESCRIPTION_RESPONSE_SUCCESSFUL)
+                        .implementation(UserDetails.class))
+                .response(responseBuilder().responseCode(String.valueOf(HttpStatus.BAD_REQUEST.value()))
                         .implementation(ErrorDto.class)
-                        .description(OpenApiConstants.DESCRIPTION_RESPONSE_400))
-                .response(responseBuilder().responseCode(String.valueOf(HttpStatus.BAD_REQUEST))
+                        .description(SchemaConstants.DESCRIPTION_RESPONSE_400))
+                .response(responseBuilder().responseCode(String.valueOf(HttpStatus.BAD_REQUEST.value()))
                         .implementation(ErrorDto.class)
-                        .description(OpenApiConstants.DESCRIPTION_RESPONSE_404))
-                .response(responseBuilder().responseCode(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR))
+                        .description(SchemaConstants.DESCRIPTION_RESPONSE_404))
+                .response(responseBuilder().responseCode(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()))
                         .implementation(ErrorDto.class)
-                        .description(OpenApiConstants.DESCRIPTION_RESPONSE_500));
+                        .description(SchemaConstants.DESCRIPTION_RESPONSE_500));
     }
 
     private Consumer<Builder> postCreateUserOpenAPI() {
-        return ops -> ops.tag(OpenApiConstants.API_USER_TAG)
-                .operationId(OpenApiConstants.OPERATION_ID_CREATE_USER).summary(OpenApiConstants.SUMMARY_CREATE_USER)
+        return ops -> ops.tag(SchemaConstants.API_USER_TAG)
+                .operationId(SchemaConstants.OPERATION_ID_CREATE_USER).summary(SchemaConstants.SUMMARY_CREATE_USER)
                 .parameter(parameterBuilder()
-                        .in(ParameterIn.PATH).name(CommonConstants.PATH_ID).description(OpenApiConstants.DESCRIPTION_PARAM_ID).required(true))
-                .response(responseBuilder().responseCode(String.valueOf(HttpStatus.CREATED))
-                        .description(OpenApiConstants.DESCRIPTION_RESPONSE_SUCCESSFUL)
-                        .implementation(User.class))
-                .response(responseBuilder().responseCode(String.valueOf(HttpStatus.BAD_REQUEST))
+                        .in(ParameterIn.PATH).name(CommonConstants.PATH_PARAM_ID).description(SchemaConstants.DESCRIPTION_PARAM_ID).required(true))
+                .response(responseBuilder().responseCode(String.valueOf(HttpStatus.CREATED.value()))
+                        .description(SchemaConstants.DESCRIPTION_RESPONSE_SUCCESSFUL)
+                        .implementation(UserDetails.class))
+                .response(responseBuilder().responseCode(String.valueOf(HttpStatus.BAD_REQUEST.value()))
                         .implementation(ErrorDto.class)
-                        .description(OpenApiConstants.DESCRIPTION_RESPONSE_400))
-                .response(responseBuilder().responseCode(String.valueOf(HttpStatus.BAD_REQUEST))
+                        .description(SchemaConstants.DESCRIPTION_RESPONSE_400))
+                .response(responseBuilder().responseCode(String.valueOf(HttpStatus.BAD_REQUEST.value()))
                         .implementation(ErrorDto.class)
-                        .description(OpenApiConstants.DESCRIPTION_RESPONSE_404))
-                .response(responseBuilder().responseCode(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR))
+                        .description(SchemaConstants.DESCRIPTION_RESPONSE_404))
+                .response(responseBuilder().responseCode(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()))
                         .implementation(ErrorDto.class)
-                        .description(OpenApiConstants.DESCRIPTION_RESPONSE_500));
+                        .description(SchemaConstants.DESCRIPTION_RESPONSE_500));
     }
+
+    private Consumer<Builder> getAllUsersOpenAPI() {
+        return ops -> ops.tag(SchemaConstants.API_USER_TAG)
+                .operationId(SchemaConstants.OPERATION_ID_GET_ALL_USERS)
+                .summary(SchemaConstants.SUMMARY_GET_ALL_USERS)
+                .parameter(parameterBuilder()
+                        .in(ParameterIn.QUERY)
+                        .name(CommonConstants.QUERY_PARAM_FILTER_NAME)
+                        .description(SchemaConstants.DESCRIPTION_QUERY_PARAM_NAME)
+                        .required(false))
+                .response(responseBuilder().responseCode(String.valueOf(HttpStatus.OK.value()))
+                        .description(SchemaConstants.DESCRIPTION_RESPONSE_SUCCESSFUL)
+                        .implementationArray(UserDetails.class))
+                .response(responseBuilder().responseCode(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()))
+                        .implementation(ErrorDto.class)
+                        .description(SchemaConstants.DESCRIPTION_RESPONSE_500));
+    }
+
 }
