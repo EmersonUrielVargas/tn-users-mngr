@@ -9,13 +9,16 @@ spring:
     console:
       enabled: true
       path: "/h2"
+  redis:
+    host: "${REDIS_HOST}"
+    port: "${REDIS_PORT}"
 springdoc:
   swagger-ui:
     enabled: true
-    path: /api-docs/swagger-ui.html
+    path: "/api-docs/swagger-ui.html"
   api-docs:
     enabled: true
-    path: /api-docs/users
+    path: "/api-docs/users"
 adapters:
   r2dbc:
     host: "${DB_HOST}"
