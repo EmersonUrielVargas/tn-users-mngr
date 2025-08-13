@@ -6,6 +6,7 @@ import co.com.nequi.model.user.User;
 import co.com.nequi.model.user.gateways.UserExternalSourceGateway;
 import co.com.nequi.model.user.gateways.UserPersistenceGateway;
 import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
@@ -20,7 +21,7 @@ public class UserUseCase {
                     userExternalSourceGateway.findUser(userId)
                     .flatMap(userToCreate ->
                         Mono.defer(()->
-                            userPersistenceGateway.upsertUser(userToCreate)
+                            userPersistenceGateway.insertUser(userToCreate)
                             .switchIfEmpty(Mono.error(new BusinessException(DomainMessage.USER_CREATION_FAIL))))
                     )
                 );
@@ -31,6 +32,14 @@ public class UserUseCase {
                 .switchIfEmpty(
                         Mono.error(new BusinessException(DomainMessage.USER_NOT_FOUND))
                 );
+    }
+
+    public Flux<User> findAllUser(){
+        return userPersistenceGateway.findAllUser();
+    }
+
+    public Flux<User> findAllUsersByName(String name){
+        return userPersistenceGateway.findAllUsersByName(name);
     }
 
 

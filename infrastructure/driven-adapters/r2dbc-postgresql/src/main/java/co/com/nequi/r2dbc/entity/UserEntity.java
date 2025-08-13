@@ -14,7 +14,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Builder
-@Table("tn_users_app.users")
+@Table("users")
 public class UserEntity {
     @Id
     private Long id;
