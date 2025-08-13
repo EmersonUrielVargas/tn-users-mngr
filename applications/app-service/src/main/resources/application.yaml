@@ -9,8 +9,13 @@ spring:
     console:
       enabled: true
       path: "/h2"
-  profiles:
-    include: null
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /api-docs/swagger-ui.html
+  api-docs:
+    enabled: true
+    path: /api-docs/users
 adapters:
   r2dbc:
     host: "${DB_HOST}"

@@ -10,7 +10,7 @@ import java.util.Arrays;
 public enum DomainMessage {
 
     INTERNAL_ERROR("0-000", "0-000","Something went wrong, please try again"),
-    USER_NOT_FOUND("0-001","0-001","The user was not found"),
+    USER_NOT_FOUND("404","0-001","The user was not found"),
     USER_CREATION_FAIL("0-002","0-002","An error occurred while creating the user"),
     ERROR_USER_ADAPTER("0-003","0-003","Something went wrong with the user adapter, please try again"),
     ERROR_DATA_USER_ADAPTER("0-004","0-004","There is an error with the request with the user adapter");

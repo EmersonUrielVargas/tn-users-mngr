@@ -15,4 +15,7 @@ public class ErrorDto {
     private String code;
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String message;
+
+    private String externalCode;
+
 }
