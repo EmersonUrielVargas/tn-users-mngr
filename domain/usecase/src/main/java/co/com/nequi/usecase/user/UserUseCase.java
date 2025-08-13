@@ -1,7 +1,7 @@
 package co.com.nequi.usecase.user;
 
 import co.com.nequi.model.enums.DomainMessage;
-import co.com.nequi.model.exceptions.DomainException;
+import co.com.nequi.model.exceptions.BusinessException;
 import co.com.nequi.model.user.User;
 import co.com.nequi.model.user.gateways.UserExternalSourceGateway;
 import co.com.nequi.model.user.gateways.UserPersistenceGateway;
@@ -21,8 +21,15 @@ public class UserUseCase {
                     .flatMap(userToCreate ->
                         Mono.defer(()->
                             userPersistenceGateway.upsertUser(userToCreate)
-                            .switchIfEmpty(Mono.error(new DomainException(DomainMessage.USER_CREATION_FAIL))))
+                            .switchIfEmpty(Mono.error(new BusinessException(DomainMessage.USER_CREATION_FAIL))))
                     )
+                );
+    }
+
+    public Mono<User> findUserById(Long userId){
+        return userPersistenceGateway.findUserById(userId)
+                .switchIfEmpty(
+                        Mono.error(new BusinessException(DomainMessage.USER_NOT_FOUND))
                 );
     }
 

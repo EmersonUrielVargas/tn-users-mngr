@@ -11,6 +11,8 @@ buildscript {
         logbackVersion = '1.5.18'
         logstashLogbackVersion = '8.0'
         mapstructVersion = '1.6.3'
+        webjarsVersion='0.59'
+        openapiStarterVersion='2.8.9'
 	}
 }
 
