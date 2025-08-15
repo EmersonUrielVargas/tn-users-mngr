@@ -10,7 +10,7 @@ public class TechnicalException extends UserException {
         super(domainMessage);
     }
 
-    public TechnicalException(String message, DomainMessage technicalMessage) {
-        super(message, technicalMessage);
+    public TechnicalException(Throwable exception, DomainMessage technicalMessage) {
+        super(exception, technicalMessage);
     }
 }

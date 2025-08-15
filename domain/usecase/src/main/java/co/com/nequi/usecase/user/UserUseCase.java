@@ -5,6 +5,7 @@ import co.com.nequi.model.exceptions.BusinessException;
 import co.com.nequi.model.user.User;
 import co.com.nequi.model.user.gateways.UserCacheGateway;
 import co.com.nequi.model.user.gateways.UserExternalSourceGateway;
+import co.com.nequi.model.user.gateways.UserNotificationGateway;
 import co.com.nequi.model.user.gateways.UserPersistenceGateway;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
@@ -16,6 +17,7 @@ public class UserUseCase {
     private final UserPersistenceGateway userPersistenceGateway;
     private final UserExternalSourceGateway userExternalSourceGateway;
     private final UserCacheGateway userCacheGateway;
+    private final UserNotificationGateway userNotificationGateway;
 
     public Mono<User> createUser(Long userId){
         return userPersistenceGateway.findUserById(userId)
@@ -24,6 +26,10 @@ public class UserUseCase {
                     .flatMap(userToCreate ->
                         Mono.defer(()->
                             userPersistenceGateway.insertUser(userToCreate)
+                            .flatMap(userCreate ->
+                                userNotificationGateway.notifyNewUser(userCreate)
+                                .thenReturn(userCreate)
+                            )
                             .switchIfEmpty(Mono.error(new BusinessException(DomainMessage.USER_CREATION_FAIL))))
                     )
                 );

@@ -1,5 +1,6 @@
 package co.com.nequi.redis.template;
 
+import co.com.nequi.model.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -31,16 +32,16 @@ class UserRedisAdapterOperationsTest {
 
     @Test
     void testSave() {
-        StepVerifier.create(adapter.save("key", "value"))
-                .expectNext("value")
+        StepVerifier.create(adapter.save("key", User.builder().build()))
+                .expectNext(User.builder().build())
                 .verifyComplete();
     }
 
     @Test
     void testSaveWithExpiration() {
 
-        StepVerifier.create(adapter.save("key", "value", 2))
-                .expectNext("value")
+        StepVerifier.create(adapter.save("key", User.builder().build(), 2))
+                .expectNext(User.builder().build())
                 .verifyComplete();
     }
 

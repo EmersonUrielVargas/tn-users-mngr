@@ -66,7 +66,7 @@ class ReactiveAdapterOperationsTest {
 
         when(repository.findById("1")).thenReturn(Mono.just(data));
 
-        StepVerifier.create(operations.findUserById("1"))
+        StepVerifier.create(operations.findById("1"))
                 .expectNext(entity)
                 .verifyComplete();
     }

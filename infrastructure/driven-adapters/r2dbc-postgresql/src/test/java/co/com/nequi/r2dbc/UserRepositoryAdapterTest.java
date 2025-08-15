@@ -33,12 +33,12 @@ class UserRepositoryAdapterTest {
     void mustFindValueById() {
         UserEntity userBd = UserEntity.builder()
                 .id(12L)
-                .name("Bui")
+                .name("Lu")
                 .build();
 
         User userDomain = User.builder()
                 .id(12L)
-                .name("Bui")
+                .name("Lu")
                 .build();
 
         when(repository.findById(12L)).thenReturn(Mono.just(userBd));
@@ -59,12 +59,12 @@ class UserRepositoryAdapterTest {
     void mustFindAllValues() {
         UserEntity userBd = UserEntity.builder()
                 .id(12L)
-                .name("Bui")
+                .name("Beatriz")
                 .build();
 
         User userDomain = User.builder()
                 .id(12L)
-                .name("Bui")
+                .name("Beatriz")
                 .build();
 
         when(repository.findAll()).thenReturn(Flux.just(userBd));
@@ -86,12 +86,12 @@ class UserRepositoryAdapterTest {
 
         UserEntity userBd = UserEntity.builder()
                 .id(12L)
-                .name("Bui")
+                .name("Monica")
                 .build();
 
         User userDomain = User.builder()
                 .id(12L)
-                .name("Bui")
+                .name("Monica")
                 .build();
         when(repository.save(userBd)).thenReturn(Mono.just(userBd));
         when(mapper.map(userDomain, UserEntity.class)).thenReturn(userBd);

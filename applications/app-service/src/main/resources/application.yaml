@@ -28,6 +28,14 @@ adapters:
     username: "${DB_USERNAME}"
     password: "${DB_USER_PASSWORD}"
 management:
+  tracing:
+    sampling:
+      probability: 1.0
+    baggage:
+      correlation:
+        fields:
+          - messageId
+      remote-fields: messageId
   endpoints:
     web:
       exposure:
@@ -44,7 +52,11 @@ cors:
 adapter:
   restconsumer:
     timeout: 5000
-    url: "https://reqres.in/api/users"
+    url: "${USER_WEB_CLIENT_URL}"
+  sqs:
+    region: "${AWS_REGION}"
+    queueUrl: "${AWS_SQS_URL}"
+    endpoint: "${AWS_SQS_ENDPOINT}"
 resilience4j:
   circuitbreaker:
     instances:
